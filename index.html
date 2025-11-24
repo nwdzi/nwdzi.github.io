@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор буста</title>
     <style>
+/* Снег */
+.snowflake {
+    position: absolute !important;
+    top: -20px !important;
+    color: white !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5) !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    z-index: 9999 !important;
+    will-change: transform, opacity !important;
+}
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1c1c1c, #292929);
@@ -28,6 +39,8 @@
             max-width: 600px;
             margin-top: 50px;
             transition: transform 0.2s ease-in-out;
+	    position: relative; 
+	    z-index: 10000; 
         }
 
         .container:hover {
@@ -636,6 +649,107 @@
 
         // Инициализация - показываем CS:GO по умолчанию
         document.getElementById('csInputs').style.display = 'block';
-    </script>
+// Функция создания снега
+function createSnowfall() {
+    const snowContainer = document.createElement('div');
+    snowContainer.className = 'snow-container';
+    snowContainer.style.position = 'fixed';
+    snowContainer.style.top = '0';
+    snowContainer.style.left = '0';
+    snowContainer.style.width = '100%';
+    snowContainer.style.height = '100%';
+    snowContainer.style.pointerEvents = 'none';
+    snowContainer.style.zIndex = '9998';
+    snowContainer.style.overflow = 'hidden';
+    document.body.appendChild(snowContainer);
+
+    let activeSnowflakes = 0;
+    const maxSnowflakes = 100; // Максимальное количество одновременно падающих снежинок
+
+    function generateSnowflake() {
+        if (activeSnowflakes < maxSnowflakes) {
+            createSnowflake(snowContainer);
+            activeSnowflakes++;
+        }
+        
+        // Случайный интервал между созданием снежинок
+        const nextInterval = Math.random() * 80 + 20; // 20-100ms
+        setTimeout(generateSnowflake, nextInterval);
+    }
+
+    function createSnowflake(container) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        
+        // Разные символы снежинок
+        const snowSymbols = ['❄', '❅', '❆', '•', '*'];
+        const symbol = snowSymbols[Math.floor(Math.random() * snowSymbols.length)];
+        snowflake.innerHTML = symbol;
+        
+        // Случайные параметры - гарантируем правильные значения
+        const left = Math.random() * 100; // 0-100% ширины экрана
+        const size = Math.random() * 0.8 + 0.4; // 0.4-1.2em
+        const duration = Math.random() * 3 + 4; // 4-7 секунд
+        const horizontalMove = (Math.random() - 0.5) * 40; // -20px до +20px
+        
+        // Устанавливаем стили
+        snowflake.style.position = 'absolute';
+        snowflake.style.top = '-20px';
+        snowflake.style.left = left + 'vw';
+        snowflake.style.fontSize = size + 'em';
+        snowflake.style.opacity = Math.random() * 0.6 + 0.4; // 0.4-1.0
+        snowflake.style.color = 'white';
+        snowflake.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.5)';
+        snowflake.style.pointerEvents = 'none';
+        snowflake.style.userSelect = 'none';
+        snowflake.style.willChange = 'transform, opacity';
+        
+        // Создаем уникальную анимацию для каждой снежинки
+        const animationName = `fall-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Динамически создаем keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ${animationName} {
+                0% {
+                    transform: translateY(0) translateX(0) rotate(0deg);
+                    opacity: ${snowflake.style.opacity};
+                }
+                100% {
+                    transform: translateY(100vh) translateX(${horizontalMove}px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        snowflake.style.animation = `${animationName} ${duration}s linear forwards`;
+        
+        container.appendChild(snowflake);
+        
+        // Удаляем снежинку после завершения анимации
+        const removeSnowflake = () => {
+            if (snowflake.parentNode) {
+                snowflake.parentNode.removeChild(snowflake);
+                activeSnowflakes--;
+            }
+            if (style.parentNode) {
+                style.parentNode.removeChild(style);
+            }
+        };
+        
+        // Два способа удаления на случай если один не сработает
+        snowflake.addEventListener('animationend', removeSnowflake);
+        setTimeout(removeSnowflake, duration * 1000 + 1000); // Запас +1 секунда
+    }
+
+    // Запускаем генерацию снежинок
+    generateSnowflake();
+}
+
+// Запускаем снегопад при загрузке страницы
+window.addEventListener('load', function() {
+    setTimeout(createSnowfall, 500);
+});    </script>
 </body>
 </html>
