@@ -73,18 +73,45 @@
             box-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
         }
 
-        .input-group button {
-            background: linear-gradient(135deg, #ff79c6, #ff5599);
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             font-weight: bold;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .input-group button:hover {
-            background: linear-gradient(135deg, #ff5599, #ff3377);
-            transform: scale(1.05);
+        .calculate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .calculate-btn:hover::before {
+            left: 100%;
+        }
+
+        .calculate-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .result {
@@ -130,20 +157,40 @@
 
         <!-- Поля для Dota 2 -->
         <div class="game-input-group" id="dotaInputs" style="display:none;">
-            <div class="input-group" id="soloInputs">
+            <div class="input-group">
+                <label for="boostTypeDota">Тип буста:</label>
+                <select id="boostTypeDota">
+                    <option value="solo">Соло буст</option>
+                    <option value="duo">Дуо буст</option>
+                    <option value="honor">Буст порядочности</option>
+                    <option value="hours">Отыгрыш часов</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="soloInputs" style="display:none;">
                 <label for="initialMMR">Изначальный ММР:</label>
                 <input type="number" id="initialMMR" placeholder="Введите изначальный ММР">
                 <label for="finalMMR">Конечный ММР:</label>
                 <input type="number" id="finalMMR" placeholder="Введите конечный ММР">
-                <button id="soloDoubleButton">Даблы</button>
+                <label for="soloDoubleSelect">Тип игры:</label>
+                <select id="soloDoubleSelect">
+                    <option value="normal">Обычный</option>
+                    <option value="double">Даблы</option>
+                </select>
             </div>
+
             <div class="input-group" id="duoInputs" style="display:none;">
                 <label for="clientMMR">ММР клиента:</label>
                 <input type="number" id="clientMMR" placeholder="Введите ММР клиента">
                 <label for="gameCount">Количество игр:</label>
                 <input type="number" id="gameCount" placeholder="Введите количество игр">
-                <button id="duoDoubleButton">Даблы</button>
+                <label for="duoDoubleSelect">Тип игры:</label>
+                <select id="duoDoubleSelect">
+                    <option value="normal">Обычный</option>
+                    <option value="double">Даблы</option>
+                </select>
             </div>
+
             <div class="input-group" id="honorInputs" style="display:none;">
                 <label for="clientMMRHonor">ММР клиента:</label>
                 <input type="number" id="clientMMRHonor" placeholder="Введите ММР">
@@ -152,6 +199,7 @@
                 <label for="finalHonor">Конечная порядочность:</label>
                 <input type="number" id="finalHonor" placeholder="Введите конечную порядочность">
             </div>
+
             <div class="input-group" id="hoursInputs" style="display:none;">
                 <label for="hoursCount">Количество часов:</label>
                 <input type="number" id="hoursCount" placeholder="Введите количество часов">
@@ -160,6 +208,15 @@
 
         <!-- Поля для Valorant -->
         <div class="game-input-group" id="valorantInputs" style="display: none;">
+            <div class="input-group">
+                <label for="boostTypeValorant">Тип буста:</label>
+                <select id="boostTypeValorant">
+                    <option value="solo">Соло буст</option>
+                    <option value="duo">Дуо буст</option>
+                    <option value="netwin">Netwin</option>
+                </select>
+            </div>
+
             <div class="input-group">
                 <label for="currentRankSelect">Текущий ранг:</label>
                 <select id="currentRankSelect">
@@ -191,7 +248,7 @@
                 </select>
             </div>
 
-            <div class="input-group">
+            <div class="input-group" id="targetRankGroup">
                 <label for="targetRankSelect">Желаемый ранг:</label>
                 <select id="targetRankSelect">
                     <option value="0">Iron 1</option>
@@ -228,7 +285,7 @@
             </div>
         </div>
 
-        <button onclick="calculatePrice()">Рассчитать цену</button>
+        <button class="calculate-btn" onclick="calculatePrice()">Рассчитать цену</button>
         <div class="result" id="result"></div>
     </div>
 
@@ -278,7 +335,7 @@
             { min: 2901, max: 3001, rate: 1350 }
         ];
 
-        // Таблицы для других игр (оставлены без изменений)
+        // Таблицы для других игр
         const soloRatesD = [
             { min: 1, max: 2000, rate: 125 },
             { min: 2000, max: 3000, rate: 150 },
@@ -379,22 +436,47 @@
             }
         });
 
-        // Функции для Dota 2 и Valorant (оставлены без изменений)
+        // Обработчик для смены типа буста в Dota 2
+        document.getElementById('boostTypeDota').addEventListener('change', updateDotaFields);
+
+        // Обработчик для смены типа буста в Valorant
+        document.getElementById('boostTypeValorant').addEventListener('change', updateValorantFields);
+
+        // Функции для обновления полей
         function updateDotaFields() {
-            const boostType = document.getElementById('boostType').value;
-            document.getElementById('soloInputs').style.display = boostType === 'solo' ? 'block' : 'none';
-            document.getElementById('duoInputs').style.display = boostType === 'duo' ? 'block' : 'none';
-            document.getElementById('honorInputs').style.display = boostType === 'honor' ? 'block' : 'none';
-            document.getElementById('hoursInputs').style.display = boostType === 'hours' ? 'block' : 'none';
+            const boostType = document.getElementById('boostTypeDota').value;
+            
+            // Скрываем все группы
+            document.getElementById('soloInputs').style.display = 'none';
+            document.getElementById('duoInputs').style.display = 'none';
+            document.getElementById('honorInputs').style.display = 'none';
+            document.getElementById('hoursInputs').style.display = 'none';
+            
+            // Показываем нужную группу
+            if (boostType === 'solo') {
+                document.getElementById('soloInputs').style.display = 'block';
+            } else if (boostType === 'duo') {
+                document.getElementById('duoInputs').style.display = 'block';
+            } else if (boostType === 'honor') {
+                document.getElementById('honorInputs').style.display = 'block';
+            } else if (boostType === 'hours') {
+                document.getElementById('hoursInputs').style.display = 'block';
+            }
         }
 
         function updateValorantFields() {
-            const boostType = document.getElementById('boostType').value;
+            const boostType = document.getElementById('boostTypeValorant').value;
             const netwinGamesGroup = document.getElementById('netwinGamesGroup');
-            const targetRank = document.getElementById('targetRank');
+            const targetRankGroup = document.getElementById('targetRankGroup');
             
-            if (netwinGamesGroup) {
-                netwinGamesGroup.style.display = boostType === 'netwin' ? 'block' : 'none';
+            if (netwinGamesGroup && targetRankGroup) {
+                if (boostType === 'netwin') {
+                    netwinGamesGroup.style.display = 'block';
+                    targetRankGroup.style.display = 'none';
+                } else {
+                    netwinGamesGroup.style.display = 'none';
+                    targetRankGroup.style.display = 'block';
+                }
             }
         }
 
@@ -426,7 +508,6 @@
                 let currentelo = initialelo;
                 
                 while (remainingelo > 0) {
-                    // Находим текущий ценовой диапазон
                     const currentRange = rates.find(range => currentelo >= range.min && currentelo < range.max);
                     
                     if (!currentRange) {
@@ -434,14 +515,10 @@
                         return;
                     }
                     
-                    // Определяем сколько elo можно бустить в этом диапазоне
                     const eloInThisRange = Math.min(remainingelo, currentRange.max - currentelo);
-                    
-                    // Расчет стоимости для этого диапазона
                     const blocksInRange = eloInThisRange / 25;
                     totalPrice += blocksInRange * currentRange.rate;
                     
-                    // Обновляем счетчики
                     remainingelo -= eloInThisRange;
                     currentelo += eloInThisRange;
                 }
@@ -449,41 +526,54 @@
                 document.getElementById('result').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
                 
             } else if (gameSelect === 'dota') {
-                // Существующий код для Dota 2
-                const boostType = document.getElementById('boostType').value;
+                // Расчет для Dota 2
+                const boostType = document.getElementById('boostTypeDota').value;
+                
                 if (boostType === 'solo') {
-                    const initialMMR = parseInt(document.getElementById('initialMMR').value);
-                    const finalMMR = parseInt(document.getElementById('finalMMR').value);
+                    const initialMMR = parseInt(document.getElementById('initialMMR').value) || 0;
+                    const finalMMR = parseInt(document.getElementById('finalMMR').value) || 0;
+                    const isDouble = document.getElementById('soloDoubleSelect').value === 'double';
+                    
+                    if (initialMMR >= finalMMR) {
+                        document.getElementById('result').innerText = "Конечный ММР должен быть больше начального!";
+                        return;
+                    }
+                    
                     for (let i = initialMMR; i < finalMMR; i++) {
-                        const rate = soloRatesD.find(r => i >= r.min && i < r.max).rate;
+                        const rate = soloRatesD.find(r => i >= r.min && i < r.max)?.rate || 0;
                         totalPrice += rate / 100;
                     }
-                    if (document.getElementById('soloDoubleButton').innerText === 'Даблы') {
+                    
+                    if (isDouble) {
                         totalPrice *= 0.75;
                     }
+                    
                 } else if (boostType === 'duo') {
-                    const clientMMR = parseInt(document.getElementById('clientMMR').value);
-                    const gameCount = parseInt(document.getElementById('gameCount').value);
+                    const clientMMR = parseInt(document.getElementById('clientMMR').value) || 0;
+                    const gameCount = parseInt(document.getElementById('gameCount').value) || 0;
+                    const isDouble = document.getElementById('duoDoubleSelect').value === 'double';
+                    
                     let currentMMR = clientMMR;
 
                     for (let i = 0; i < gameCount; i++) {
-                        const mmrIncrease = document.getElementById('duoDoubleButton').innerText === 'Даблы' ? 50 : 25;
+                        const mmrIncrease = isDouble ? 50 : 25;
                         currentMMR += mmrIncrease;
-                        const rate = duoRatesD.find(r => currentMMR >= r.min && currentMMR < r.max).rate;
+                        const rate = duoRatesD.find(r => currentMMR >= r.min && currentMMR < r.max)?.rate || 0;
                         totalPrice += rate;
                     }
 
-                    if (document.getElementById('duoDoubleButton').innerText === 'Даблы') {
+                    if (isDouble) {
                         if (clientMMR < 5630) {
                             totalPrice *= 1.5;
                         } else {
                             totalPrice *= 1.3;
                         }
                     }
+                    
                 } else if (boostType === 'honor') {
-                    const clientMMR = parseInt(document.getElementById('clientMMRHonor').value);
-                    const initialHonor = parseInt(document.getElementById('initialHonor').value);
-                    const finalHonor = parseInt(document.getElementById('finalHonor').value);
+                    const clientMMR = parseInt(document.getElementById('clientMMRHonor').value) || 0;
+                    const initialHonor = parseInt(document.getElementById('initialHonor').value) || 0;
+                    const finalHonor = parseInt(document.getElementById('finalHonor').value) || 0;
                     const honorIncrease = finalHonor - initialHonor;
 
                     if (clientMMR >= 5600) {
@@ -493,9 +583,10 @@
                     } else {
                         totalPrice = (honorIncrease / 1000) * 2000;
                     }
+                    
                 } else if (boostType === 'hours') {
-                    let hoursCount = parseInt(document.getElementById('hoursCount').value);
-                    if (isNaN(hoursCount) || hoursCount <= 0) {
+                    let hoursCount = parseInt(document.getElementById('hoursCount').value) || 0;
+                    if (hoursCount <= 0) {
                         document.getElementById('result').innerText = "Введите корректное количество часов.";
                         return;
                     }
@@ -510,41 +601,38 @@
                         }
                     }
                 }
+                
                 document.getElementById('result').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
                 
             } else if (gameSelect === 'valorant') {
-                // Существующий код для Valorant
-                const boostType = document.getElementById('boostType').value;
-                const currentRank = parseInt(document.getElementById('currentRankSelect').value);
-                const targetRank = parseInt(document.getElementById('targetRankSelect').value);
+                // Расчет для Valorant
+                const boostType = document.getElementById('boostTypeValorant').value;
+                const currentRank = parseInt(document.getElementById('currentRankSelect').value) || 0;
 
-                if (boostType === 'solo') {
+                if (boostType === 'solo' || boostType === 'duo') {
+                    const targetRank = parseInt(document.getElementById('targetRankSelect').value) || 0;
+                    
+                    if (currentRank >= targetRank) {
+                        document.getElementById('result').innerText = "Желаемый ранг должен быть выше текущего!";
+                        return;
+                    }
+                    
+                    const rates = boostType === 'solo' ? soloRatesV : duoRatesV;
+                    
                     for (let i = currentRank; i < targetRank; i++) {
-                        const rate = soloRatesV.find(r => i >= r.min && i < r.max).rate;
+                        const rate = rates.find(r => i >= r.min && i < r.max)?.rate || 0;
                         totalPrice += rate;
                     }
-                } else if (boostType === 'duo') {
-                    for (let i = currentRank; i < targetRank; i++) {
-                        const rate = duoRatesV.find(r => i >= r.min && i < r.max).rate;
-                        totalPrice += rate;
-                    }
+                    
                 } else if (boostType === 'netwin') {
                     const netwinGames = parseInt(document.getElementById('netwinGames').value) || 0;
-                    const rate = netwinRatesV.find(r => currentRank >= r.min && currentRank < r.max).rate;
+                    const rate = netwinRatesV.find(r => currentRank >= r.min && currentRank < r.max)?.rate || 0;
                     totalPrice = rate * netwinGames;
                 }
+                
                 document.getElementById('result').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
             }
         }
-
-        // Обработчики кнопок для Dota 2
-        document.getElementById('soloDoubleButton').addEventListener('click', function() {
-            this.innerText = this.innerText === 'Даблы' ? 'Обычный' : 'Даблы';
-        });
-
-        document.getElementById('duoDoubleButton').addEventListener('click', function() {
-            this.innerText = this.innerText === 'Даблы' ? 'Обычный' : 'Даблы';
-        });
 
         // Инициализация - показываем CS:GO по умолчанию
         document.getElementById('csInputs').style.display = 'block';
