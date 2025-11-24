@@ -112,12 +112,12 @@
         <!-- Поля для CS:GO -->
         <div class="game-input-group" id="csInputs">
             <div class="input-group">
-                <label for="initialPTS">Изначальное количество PTS:</label>
-                <input type="number" id="initialPTS" placeholder="Введите начальное количество PTS">
+                <label for="initialelo">Изначальное количество elo:</label>
+                <input type="number" id="initialelo" placeholder="Введите начальное количество elo">
             </div>
             <div class="input-group">
-                <label for="targetPTS">Желаемое количество PTS:</label>
-                <input type="number" id="targetPTS" placeholder="Введите желаемое количество PTS">
+                <label for="targetelo">Желаемое количество elo:</label>
+                <input type="number" id="targetelo" placeholder="Введите желаемое количество elo">
             </div>
             <div class="input-group">
                 <label for="boostTypeCS">Тип буста:</label>
@@ -405,45 +405,45 @@
 
             if (gameSelect === 'cs') {
                 // Расчет для CS:GO
-                const initialPTS = parseInt(document.getElementById('initialPTS').value) || 0;
-                const targetPTS = parseInt(document.getElementById('targetPTS').value) || 0;
+                const initialelo = parseInt(document.getElementById('initialelo').value) || 0;
+                const targetelo = parseInt(document.getElementById('targetelo').value) || 0;
                 const boostType = document.getElementById('boostTypeCS').value;
                 
-                if (initialPTS >= targetPTS) {
-                    document.getElementById('result').innerText = "Целевое количество PTS должно быть больше начального!";
+                if (initialelo >= targetelo) {
+                    document.getElementById('result').innerText = "Целевое количество elo должно быть больше начального!";
                     return;
                 }
                 
-                if (initialPTS < 0 || targetPTS < 0) {
-                    document.getElementById('result').innerText = "Количество PTS не может быть отрицательным!";
+                if (initialelo < 0 || targetelo < 0) {
+                    document.getElementById('result').innerText = "Количество elo не может быть отрицательным!";
                     return;
                 }
 
-                const ptsToBoost = targetPTS - initialPTS;
+                const eloToBoost = targetelo - initialelo;
                 const rates = boostType === 'solo' ? soloRatesCS : duoRatesCS;
                 
-                let remainingPTS = ptsToBoost;
-                let currentPTS = initialPTS;
+                let remainingelo = eloToBoost;
+                let currentelo = initialelo;
                 
-                while (remainingPTS > 0) {
+                while (remainingelo > 0) {
                     // Находим текущий ценовой диапазон
-                    const currentRange = rates.find(range => currentPTS >= range.min && currentPTS < range.max);
+                    const currentRange = rates.find(range => currentelo >= range.min && currentelo < range.max);
                     
                     if (!currentRange) {
-                        document.getElementById('result').innerText = "Ошибка: PTS вне диапазона расценок!";
+                        document.getElementById('result').innerText = "Ошибка: elo вне диапазона расценок!";
                         return;
                     }
                     
-                    // Определяем сколько PTS можно бустить в этом диапазоне
-                    const ptsInThisRange = Math.min(remainingPTS, currentRange.max - currentPTS);
+                    // Определяем сколько elo можно бустить в этом диапазоне
+                    const eloInThisRange = Math.min(remainingelo, currentRange.max - currentelo);
                     
                     // Расчет стоимости для этого диапазона
-                    const blocksInRange = ptsInThisRange / 25;
+                    const blocksInRange = eloInThisRange / 25;
                     totalPrice += blocksInRange * currentRange.rate;
                     
                     // Обновляем счетчики
-                    remainingPTS -= ptsInThisRange;
-                    currentPTS += ptsInThisRange;
+                    remainingelo -= eloInThisRange;
+                    currentelo += eloInThisRange;
                 }
                 
                 document.getElementById('result').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
