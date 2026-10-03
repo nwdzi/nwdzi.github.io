@@ -1,197 +1,864 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mikhail — IT Support Engineer</title>
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --bg: #0f1420;
+        --bg-card: rgba(30, 38, 54, 0.72);
+        --bg-card-solid: #1e2636;
+        --bg-elevated: rgba(45, 55, 75, 0.55);
+        --bg-elevated-hover: rgba(58, 70, 95, 0.75);
+        --accent: #3fa9f5;
+        --accent-2: #7c5cff;
+        --accent-hover: #6cc0ff;
+        --text: #eef2f8;
+        --text-muted: #93a0b8;
+        --border: rgba(255, 255, 255, 0.08);
+        --border-hover: rgba(63, 169, 245, 0.45);
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+        --glow: 0 0 30px rgba(63, 169, 245, 0.35);
+    }
+
+    @keyframes gradientShift {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% {
+            box-shadow: 0 0 30px rgba(63, 169, 245, 0.35),
+                        0 0 60px rgba(124, 92, 255, 0.18);
+        }
+        50% {
+            box-shadow: 0 0 45px rgba(63, 169, 245, 0.55),
+                        0 0 90px rgba(124, 92, 255, 0.35);
+        }
+    }
+
+    @keyframes floatSlow {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-6px); }
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(-45deg, #0f1420, #1a2035, #131a2b, #0d1220);
+        background-size: 400% 400%;
+        animation: gradientShift 22s ease infinite;
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 20px;
+    }
+
+    .card {
+        position: relative;
+        width: 100%;
+        max-width: 820px;
+        background: var(--bg-card);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        opacity: 0;
+        animation: fadeInUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    /* ---- Language switch ---- */
+    .lang-switch {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        background: rgba(15, 20, 32, 0.65);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+    }
+
+    .lang-switch button {
+        font-family: inherit;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        background: transparent;
+        border: none;
+        border-radius: 7px;
+        padding: 6px 11px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .lang-switch button:hover {
+        color: var(--text);
+    }
+
+    .lang-switch button.active {
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 4px 14px rgba(63, 169, 245, 0.35);
+    }
+
+    /* ---- Header ---- */
+    .header {
+        position: relative;
+        padding: 56px 40px 44px;
+        text-align: center;
+        background: linear-gradient(160deg, rgba(44, 62, 80, 0.75) 0%, rgba(30, 38, 54, 0.4) 100%);
+        border-bottom: 1px solid var(--border);
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 50% 0%, rgba(63, 169, 245, 0.18), transparent 55%);
+        animation: floatSlow 9s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .avatar {
+        position: relative;
+        width: 118px;
+        height: 118px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3fa9f5, #7c5cff, #2c3e50);
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite, pulseGlow 4s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 46px;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 auto 24px;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        user-select: none;
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .avatar:hover {
+        transform: scale(1.05) rotate(-3deg);
+    }
     
-    <title>Mikhail - IT Support Engineer CV</title>
-    <style>
-        *, *::before, *::after { 
-            box-sizing: border-box; 
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+    
+    .header h1 {
+        position: relative;
+        font-size: 2.3rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg, #ffffff, #9fc9ff, #ffffff);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 8s ease infinite;
+    }
+
+    .header .role {
+        position: relative;
+        color: var(--accent);
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    .header .location {
+        position: relative;
+        color: var(--text-muted);
+        font-size: 0.92rem;
+    }
+
+    /* ---- Contacts ---- */
+    .contacts {
+        padding: 34px 40px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .contact-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .contact-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 11px 18px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    border-color 0.25s ease,
+                    background 0.25s ease,
+                    box-shadow 0.25s ease,
+                    color 0.25s ease;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .contact-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(63, 169, 245, 0.25), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .contact-btn:hover {
+        transform: translateY(-3px);
+        border-color: var(--border-hover);
+        background: var(--bg-elevated-hover);
+        color: var(--accent-hover);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), var(--glow);
+    }
+
+    .contact-btn:hover::after {
+        opacity: 1;
+    }
+
+    .contact-btn svg {
+        width: 17px;
+        height: 17px;
+        flex-shrink: 0;
+        display: block;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .contact-btn:hover svg {
+        transform: scale(1.18) rotate(-4deg);
+    }
+
+    .contact-btn .icon {
+        font-size: 1.05rem;
+        line-height: 1;
+        transition: transform 0.3s ease;
+    }
+
+    .contact-btn:hover .icon {
+        transform: scale(1.18);
+    }
+
+    /* ---- Sections ---- */
+    .content {
+        padding: 40px;
+    }
+
+    .section {
+        margin-bottom: 42px;
+        opacity: 0;
+        animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .section:nth-child(1) { animation-delay: 0.15s; }
+    .section:nth-child(2) { animation-delay: 0.25s; }
+    .section:nth-child(3) { animation-delay: 0.35s; }
+    .section:nth-child(4) { animation-delay: 0.45s; }
+    .section:nth-child(5) { animation-delay: 0.55s; }
+
+    .section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section h2 {
+        position: relative;
+        font-size: 1.28rem;
+        color: var(--accent);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section h2::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        width: 60px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        border-radius: 2px;
+        transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .section:hover h2::after {
+        width: 100%;
+    }
+
+    .about-text {
+        color: var(--text);
+        font-size: 0.95rem;
+        opacity: 0.92;
+    }
+
+    /* ---- Experience ---- */
+    .job {
+        position: relative;
+        margin-bottom: 28px;
+        padding-left: 22px;
+        border-left: 2px solid var(--border);
+        transition: border-color 0.3s ease;
+    }
+
+    .job:hover {
+        border-left-color: var(--accent);
+    }
+
+    .job::before {
+        content: "";
+        position: absolute;
+        left: -7px;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--bg-card-solid);
+        border: 2px solid var(--accent);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .job:hover::before {
+        transform: scale(1.25);
+        box-shadow: 0 0 12px rgba(63, 169, 245, 0.7);
+    }
+
+    .job:last-child {
+        margin-bottom: 0;
+    }
+
+    .job-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .job-title {
+        font-size: 1.02rem;
+        font-weight: 600;
+        color: var(--text);
+        transition: color 0.3s ease;
+    }
+
+    .job:hover .job-title {
+        color: var(--accent-hover);
+    }
+
+    .job-date {
+        font-size: 0.83rem;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    .job ul {
+        padding-left: 20px;
+        color: var(--text);
+        opacity: 0.9;
+        font-size: 0.92rem;
+    }
+
+    .job ul li {
+        margin-bottom: 6px;
+        transition: transform 0.25s ease, color 0.25s ease;
+    }
+
+    .job ul li:hover {
+        transform: translateX(4px);
+        color: var(--accent-hover);
+    }
+
+    /* ---- Skills ---- */
+    .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .skill-tag {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 7px 14px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    border-color 0.25s ease,
+                    color 0.25s ease,
+                    background 0.25s ease,
+                    box-shadow 0.25s ease;
+    }
+
+    .skill-tag:hover {
+        transform: translateY(-3px);
+        border-color: var(--border-hover);
+        color: var(--accent-hover);
+        background: var(--bg-elevated-hover);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3), 0 0 18px rgba(63, 169, 245, 0.2);
+    }
+
+    /* ---- Info grid (langs + tools) ---- */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 26px;
+    }
+
+    .info-block h3 {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+    }
+
+    .info-block p {
+        font-size: 0.92rem;
+        margin-bottom: 6px;
+        opacity: 0.92;
+        transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .info-block p:hover {
+        color: var(--accent-hover);
+        transform: translateX(3px);
+    }
+
+    .info-block p strong {
+        color: var(--text);
+    }
+
+    /* ---- Education ---- */
+    .edu-item {
+        position: relative;
+        margin-bottom: 18px;
+        padding-left: 22px;
+        border-left: 2px solid var(--border);
+        transition: border-color 0.3s ease;
+    }
+
+    .edu-item:hover {
+        border-left-color: var(--accent);
+    }
+
+    .edu-item::before {
+        content: "";
+        position: absolute;
+        left: -7px;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--bg-card-solid);
+        border: 2px solid var(--accent);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .edu-item:hover::before {
+        transform: scale(1.25);
+        box-shadow: 0 0 12px rgba(63, 169, 245, 0.7);
+    }
+
+    .edu-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .edu-item .edu-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text);
+    }
+
+    .edu-item .edu-desc {
+        font-size: 0.9rem;
+        color: var(--text);
+        opacity: 0.85;
+        margin-top: 2px;
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+        text-align: center;
+        padding: 24px 40px 34px;
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        border-top: 1px solid var(--border);
+    }
+
+    /* ---- Reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.001ms !important;
         }
+    }
+
+    /* ---- Mobile ---- */
+    @media (max-width: 600px) {
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            background-color: #525659;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
+            padding: 24px 12px;
         }
-        .container {
-            display: flex;
-            width: 210mm;
-            min-height: 297mm;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+        .lang-switch {
+            top: 14px;
+            right: 14px;
         }
-        .left-column {
-            width: 35%;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 30px;
+
+        .header {
+            padding: 62px 24px 32px;
         }
-        .right-column {
-            width: 65%;
-            padding: 40px;
-            background-color: #ffffff;
+
+        .header h1 {
+            font-size: 1.8rem;
         }
-        h2 {
-            font-size: 15pt;
-            color: #34495e;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-top: 0;
-            margin-bottom: 12px;
+
+        .avatar {
+            width: 96px;
+            height: 96px;
+            font-size: 36px;
         }
-        .left-column h2 {
-            color: #3498db;
-            border-bottom: 2px solid #34495e;
-            font-size: 13pt;
+
+        .contacts {
+            padding: 26px 20px;
         }
-        h3 {
-            font-size: 11pt;
-            margin: 10px 0 2px 0;
-            color: #2c3e50;
+
+        .contact-btn {
+            font-size: 0.85rem;
+            padding: 10px 14px;
         }
-        p, ul {
-            font-size: 9.5pt;
-            margin: 0 0 8px 0;
+
+        .content {
+            padding: 28px 24px;
         }
-        ul {
-            padding-left: 18px;
-        }
-        li {
-            margin-bottom: 4px;
-        }
-        .skill-item {
-            background-color: #34495e;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin: 0 4px 4px 0;
-            font-size: 8.5pt;
-        }
-        .date {
-            font-size: 8.5pt;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        .contact-link {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .contact-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Left column -->
-        <div class="left-column">
-            <h2 style="border:none; margin-bottom:2px; color:#ecf0f1; font-size:22pt;">Mikhail</h2>
-            <p style="font-size: 13pt; color: #3498db; margin-bottom: 20px;">IT Support Engineer / Junior System Administrator</p>
-            
-            <p>📍 Belgrade, Serbia</p>
-            <p>👤 22 years old</p>
-            <p>✈️ Telegram: <a href="https://t.me/nwdzi" class="contact-link">@nwdzi</a></p>
-            <p>📩 mihailnadym891@gmail.com</p>
-            <p>📞 +7 951 989-18-09 (WhatsApp / Viber)</p>
-            <p>📞 +381 63 759-6722</p>
-
-            <h2 style="margin-top: 30px;">Skills</h2>
-            <div>
-                <span class="skill-item">Troubleshooting (HW/SW)</span>
-                <span class="skill-item">Windows 10/11</span>
-                <span class="skill-item">Linux (Ubuntu / Debian)</span>
-                <span class="skill-item">macOS</span>
-                <span class="skill-item">POS Terminals / Cash Registers</span>
-                <span class="skill-item">Remote Support</span>
-                <span class="skill-item">Ticketing Systems</span>
-                <span class="skill-item">Networking: Ethernet / Wi-Fi</span>
-                <span class="skill-item">GPRS / 3G Connectivity</span>
-                <span class="skill-item">Port Forwarding / NAT</span>
-                <span class="skill-item">FTP / File Transfer</span>
-                <span class="skill-item">PC &amp; Laptop Diagnostics</span>
-                <span class="skill-item">Peripherals: Printers, MFPs</span>
-                <span class="skill-item">Scripting: Python / VBA</span>
-                <span class="skill-item">Server Administration</span>
-                <span class="skill-item">AI &amp; Prompting</span>
-            </div>
-
-            <h2 style="margin-top: 30px;">Languages</h2>
-            <p><strong>Russian:</strong> Native</p>
-            <p><strong>English:</strong> B2</p>
-            <p><strong>Serbian:</strong> Learning (A1)</p>
-
-            <h2 style="margin-top: 30px;">Tools &amp; Software</h2>
-            <p>Windows / Windows Server, Active Directory, Linux (Ubuntu/Debian), macOS, Jira, ticketing systems, T3 code, MS Office, VS Code, Python, AI Tools (DeepSeek, ChatGPT, Gemini)</p>
+    <div class="card">
+        <!-- Language switch -->
+        <div class="lang-switch">
+            <button type="button" data-lang="en" class="active">EN</button>
+            <button type="button" data-lang="ru">RU</button>
         </div>
 
-        <!-- Right column -->
-        <div class="right-column">
-            <div class="section">
-                <h2>About Me</h2>
-                <p>IT Support Engineer with 2 years of hands-on experience in POS/terminal support, combining on-site and remote troubleshooting. Skilled in diagnosing and repairing Windows- and Linux-based cash registers and payment terminals, configuring network connectivity (Ethernet, Wi-Fi, GPRS/3G), and providing remote assistance to users over the phone. Raised in a family with an IT business — I have understood PC hardware, diagnostics, and repair since childhood. I also have experience building my own home Linux server with remote access. Native Russian speaker with English at B2 level. Quick learner, focused on growing in IT Support / System Administration.</p>
+        <!-- Header -->
+        <div class="header">
+            <div class="avatar">
+    <img src="photo.jpg" alt="Mikhail">
+</div>
+            <h1>Mikhail</h1>
+            <div class="role" data-en="IT Support Engineer / Junior System Administrator" data-ru="IT Support Engineer / Junior System Administrator">IT Support Engineer / Junior System Administrator</div>
+            <div class="location" data-en="🇷🇸 Belgrade, Serbia · 22 years old" data-ru="🇷🇸 Белград, Сербия · 22 года">🇷🇸 Belgrade, Serbia · 22 years old</div>
+        </div>
+
+        <!-- Contacts -->
+        <div class="contacts">
+            <!-- Social row -->
+            <div class="contact-group">
+                <a href="https://t.me/nwdzi" class="contact-btn" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="#29A9EB" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    @nwdzi
+                </a>
+                <a href="https://github.com/nwdzi" class="contact-btn" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="#eef2f8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                    </svg>
+                    nwdzi
+                </a>
+                <span class="contact-btn" title="Discord username">
+                    <svg viewBox="0 0 24 24" fill="#5865F2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+                    </svg>
+                    pmashka
+                </span>
             </div>
 
-            <div class="section">
-                <h2>Experience</h2>
-                <h3>POS Engineer</h3>
-                <p class="date">06.2025 – 10.2026</p>
-                <ul>
-                    <li>Provided on-site and remote technical support for POS terminals and cash registers based on Windows and Linux.</li>
-                    <li>Diagnosed and repaired hardware and software issues on cash registers, terminals, and connected peripherals.</li>
-                    <li>Assisted users remotely over the phone, guiding them step-by-step through troubleshooting and repair procedures.</li>
-                    <li>Configured and diagnosed network connectivity: Ethernet, Wi-Fi, and GPRS/3G.</li>
-                    <li>Processed and resolved service requests through the company's internal ticketing system; independently acquired and handled client tickets when required.</li>
-                    <li>Performed on-site visits to resolve issues that could not be fixed remotely.</li>
-                </ul>
+            <!-- Contact row -->
+            <div class="contact-group">
+                <a href="mailto:mihailnadym891@gmail.com" class="contact-btn">
+                    <svg viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path fill="#4285F4" d="M34.9 0h442.2C493.2 0 506 12.8 506 28.6v31.7L256 214.5 6 60.3V28.6C6 12.8 18.8 0 34.9 0z"/>
+                        <path fill="#34A853" d="M6 60.3v295.1C6 371.2 18.8 384 34.9 384h31.6V132.9L6 60.3z"/>
+                        <path fill="#FBBC04" d="M475.5 384h31.6c16.1 0 28.9-12.8 28.9-28.6V60.3l-60.5 72.6V384z"/>
+                        <path fill="#EA4335" d="M66.5 132.9V384h379V132.9L256 265.3 66.5 132.9z"/>
+                    </svg>
+                    mihailnadym891@gmail.com
+                </a>
+                <a href="tel:+79519891809" class="contact-btn">
+                    <span class="icon">📞</span> +7 951 989-18-09
+                </a>
+                <a href="tel:+381637596722" class="contact-btn">
+                    <span class="icon">📞</span> +381 63 759-6722
+                </a>
+            </div>
+        </div>
 
-                <h3>Home Linux Server (Personal Project)</h3>
-                <p class="date">Personal project</p>
-                <ul>
-                    <li>Installed and configured a Linux server (Ubuntu/Debian) on home hardware.</li>
-                    <li>Configured port forwarding and NAT for external network access to the server.</li>
-                    <li>Deployed a self-hosted cloud storage and provided remote access to it.</li>
-                    <li>Set up an FTP server for file transfer and remote data access.</li>
-                    <li>Performed basic network security configuration, user and access rights management.</li>
-                    <li>Diagnosed and resolved server-side issues, worked with logs.</li>
-                </ul>
+        <!-- Content -->
+        <div class="content">
+            <!-- About -->
+            <div class="section">
+                <h2 data-en="About Me" data-ru="Обо мне">About Me</h2>
+                <p class="about-text"
+                   data-en="IT Support Engineer with 2 years of hands-on experience in POS/terminal support, combining on-site and remote troubleshooting. Skilled in diagnosing and repairing Windows- and Linux-based cash registers and payment terminals, configuring network connectivity (Ethernet, Wi-Fi, GPRS/3G), and providing remote assistance to users over the phone. I also have freelance experience deploying video surveillance systems from scratch — from client request and equipment selection to installation and configuration. Raised in a family with an IT business — I have understood PC hardware, diagnostics, and repair since childhood. I also have experience building my own home Linux server with remote access. Native Russian speaker with English at B2 level. Quick learner, focused on growing in IT Support / System Administration."
+                   data-ru="IT Support Engineer с 2 годами практического опыта в поддержке POS-терминалов — работа на месте и удалённый troubleshooting. Навыки диагностики и ремонта касс и платёжных терминалов на Windows и Linux, настройки сетевого подключения (Ethernet, Wi-Fi, GPRS/3G), удалённой помощи пользователям по телефону. Также есть фриланс-опыт развёртывания систем видеонаблюдения с нуля — от запроса клиента и подбора оборудования до установки и настройки. Вырос в семье с IT-бизнесом — с детства разбираюсь в железе ПК, диагностике и ремонте. Есть опыт создания собственного домашнего Linux-сервера с удалённым доступом. Русский — родной, английский — B2. Быстро обучаюсь, нацелен на развитие в IT Support / System Administration.">
+                    IT Support Engineer with 2 years of hands-on experience in POS/terminal support, combining on-site and remote troubleshooting. Skilled in diagnosing and repairing Windows- and Linux-based cash registers and payment terminals, configuring network connectivity (Ethernet, Wi-Fi, GPRS/3G), and providing remote assistance to users over the phone. I also have freelance experience deploying video surveillance systems from scratch — from client request and equipment selection to installation and configuration. Raised in a family with an IT business — I have understood PC hardware, diagnostics, and repair since childhood. I also have experience building my own home Linux server with remote access. Native Russian speaker with English at B2 level. Quick learner, focused on growing in IT Support / System Administration.
+                </p>
             </div>
 
+            <!-- Experience -->
             <div class="section">
-                <h2>Technical Competencies</h2>
-                <ul>
-                    <li><strong>User Support:</strong> On-site and remote support (phone-based guidance), handling and prioritizing requests, diagnosing software and hardware issues.</li>
-                    <li><strong>Ticketing Systems:</strong> Processing service requests through an internal ticketing system; independently acquiring and managing client tickets.</li>
-                    <li><strong>Windows &amp; Linux Environments:</strong> Confident with Windows 10/11; hands-on with Linux-based terminals and servers. Familiar with Windows Server and Active Directory (ready to develop further on the job).</li>
-                    <li><strong>POS &amp; Hardware:</strong> Diagnostics and repair of POS terminals, cash registers, PCs, laptops, and peripherals (printers, MFPs).</li>
-                    <li><strong>Networking:</strong> Configuration and diagnostics of Ethernet, Wi-Fi, and GPRS/3G; port forwarding, NAT, FTP, understanding of network principles.</li>
-                    <li><strong>Linux &amp; Servers:</strong> Installing and configuring Linux servers, deploying services (including FTP), remote access, working with logs.</li>
-                    <li><strong>Automation &amp; Scripting:</strong> Basic Python skills, writing VBA macros, understanding of system administration automation practices.</li>
-                    <li><strong>Documentation &amp; Research:</strong> Quickly navigate technical documentation and guidelines, independently solve non-standard tasks.</li>
-                    <li><strong>AI &amp; LLMs:</strong> Using LLMs (DeepSeek, ChatGPT, Gemini) to optimize solution finding and documentation preparation.</li>
-                </ul>
+                <h2 data-en="Experience" data-ru="Опыт">Experience</h2>
+
+                <div class="job">
+                    <div class="job-header">
+                        <span class="job-title" data-en="POS Engineer" data-ru="POS-инженер">POS Engineer</span>
+                        <span class="job-date" data-en="06.2025 – 10.2026" data-ru="06.2025 – 10.2026">06.2025 – 10.2026</span>
+                    </div>
+                    <ul>
+                        <li data-en="Provided on-site and remote technical support for POS terminals and cash registers based on Windows and Linux."
+                            data-ru="Оказывал поддержку POS-терминалов и касс на Windows и Linux — на месте и удалённо.">Provided on-site and remote technical support for POS terminals and cash registers based on Windows and Linux.</li>
+                        <li data-en="Diagnosed and repaired hardware and software issues on cash registers, terminals, and connected peripherals."
+                            data-ru="Диагностировал и устранял неполадки hardware и software на кассах, терминалах и подключённой периферии.">Diagnosed and repaired hardware and software issues on cash registers, terminals, and connected peripherals.</li>
+                        <li data-en="Assisted users remotely over the phone, guiding them step-by-step through troubleshooting and repair procedures."
+                            data-ru="Помогал пользователям удалённо по телефону, пошагово проводя их через диагностику и ремонт.">Assisted users remotely over the phone, guiding them step-by-step through troubleshooting and repair procedures.</li>
+                        <li data-en="Configured and diagnosed network connectivity: Ethernet, Wi-Fi, and GPRS/3G."
+                            data-ru="Настраивал и диагностировал сетевое подключение: Ethernet, Wi-Fi и GPRS/3G.">Configured and diagnosed network connectivity: Ethernet, Wi-Fi, and GPRS/3G.</li>
+                        <li data-en="Processed and resolved service requests through the company's internal ticketing system; independently acquired and handled client tickets when required."
+                            data-ru="Обрабатывал заявки через внутреннюю тикет-систему компании; при необходимости самостоятельно принимал и вёл тикеты клиентов.">Processed and resolved service requests through the company's internal ticketing system; independently acquired and handled client tickets when required.</li>
+                        <li data-en="Performed on-site visits to resolve issues that could not be fixed remotely."
+                            data-ru="Выезжал на объекты для решения проблем, которые нельзя было устранить удалённо.">Performed on-site visits to resolve issues that could not be fixed remotely.</li>
+                    </ul>
+                </div>
+
+                <div class="job">
+                    <div class="job-header">
+                        <span class="job-title" data-en="Video Surveillance Engineer (Freelance)" data-ru="Инженер систем видеонаблюдения (фриланс)">Video Surveillance Engineer (Freelance)</span>
+                        <span class="job-date" data-en="2025 – 2026" data-ru="2025 – 2026">2025 – 2026</span>
+                    </div>
+                    <ul>
+                        <li data-en="Managed the full project cycle: client request, equipment selection, procurement, installation, and configuration."
+                            data-ru="Вёл полный цикл проекта: запрос клиента, подбор оборудования, закупка, установка и настройка.">Managed the full project cycle: client request, equipment selection, procurement, installation, and configuration.</li>
+                        <li data-en="Selected and procured CCTV equipment (Hikvision IP cameras, PoE switches, cabling) based on client needs and budget, choosing the best supplier offer."
+                            data-ru="Подбирал и закупал оборудование CCTV (IP-камеры Hikvision, PoE-коммутаторы, кабели) под задачи и бюджет клиента, выбирая лучшее предложение поставщика.">Selected and procured CCTV equipment (Hikvision IP cameras, PoE switches, cabling) based on client needs and budget, choosing the best supplier offer.</li>
+                        <li data-en="Installed cameras indoors and outdoors, routed and terminated cabling, and connected cameras to PoE switches."
+                            data-ru="Устанавливал камеры в помещениях и на улице, прокладывал и оконцовывал кабели, подключал камеры к PoE-коммутаторам.">Installed cameras indoors and outdoors, routed and terminated cabling, and connected cameras to PoE switches.</li>
+                        <li data-en="Configured system access via web interface and remote access through a mobile application."
+                            data-ru="Настраивал доступ к системе через веб-интерфейс и удалённый доступ через мобильное приложение.">Configured system access via web interface and remote access through a mobile application.</li>
+                        <li data-en="Provided post-installation remote support, guiding the client by phone through system usage."
+                            data-ru="Оказывал удалённую поддержку после установки, по телефону помогая клиенту освоить систему.">Provided post-installation remote support, guiding the client by phone through system usage.</li>
+                    </ul>
+                </div>
+
+                <div class="job">
+                    <div class="job-header">
+                        <span class="job-title" data-en="Home Linux Server" data-ru="Домашний Linux-сервер">Home Linux Server</span>
+                        <span class="job-date" data-en="Personal project" data-ru="Личный проект">Personal project</span>
+                    </div>
+                    <ul>
+                        <li data-en="Installed and configured a Linux server (Ubuntu/Debian) on home hardware."
+                            data-ru="Установил и настроил Linux-сервер (Ubuntu/Debian) на домашнем оборудовании.">Installed and configured a Linux server (Ubuntu/Debian) on home hardware.</li>
+                        <li data-en="Configured port forwarding and NAT for external network access to the server."
+                            data-ru="Настроил проброс портов и NAT для доступа к серверу из внешней сети.">Configured port forwarding and NAT for external network access to the server.</li>
+                        <li data-en="Deployed a self-hosted cloud storage and provided remote access to it."
+                            data-ru="Развернул собственное облачное хранилище и обеспечил удалённый доступ к нему.">Deployed a self-hosted cloud storage and provided remote access to it.</li>
+                        <li data-en="Set up an FTP server for file transfer and remote data access."
+                            data-ru="Настроил FTP-сервер для передачи файлов и удалённого доступа к данным.">Set up an FTP server for file transfer and remote data access.</li>
+                        <li data-en="Performed basic network security configuration, user and access rights management."
+                            data-ru="Выполнил базовую настройку сетевой безопасности, управление пользователями и правами доступа.">Performed basic network security configuration, user and access rights management.</li>
+                        <li data-en="Diagnosed and resolved server-side issues, worked with logs."
+                            data-ru="Диагностировал и устранял проблемы серверной части, работал с логами.">Diagnosed and resolved server-side issues, worked with logs.</li>
+                    </ul>
+                </div>
             </div>
 
+            <!-- Skills -->
             <div class="section">
-                <h2>Education</h2>
-                <h3>Higher Technical Education (in progress)</h3>
-                <p class="date">Present</p>
-                <ul>
-                    <li><strong>Ural Federal University (UrFU):</strong> Technological Machines and Equipment (2 years) / Infocommunication Technologies (1 year)</li>
-                    <li><strong>UGLTU:</strong> Automation of Technological Processes and Production (3 years)</li>
-                    <li><strong>Serbian University (planned):</strong> Currently actively learning Serbian to transfer and complete a Bachelor's degree at a local university.</li>
-                </ul>
+                <h2 data-en="Skills" data-ru="Навыки">Skills</h2>
+                <div class="skills">
+                    <span class="skill-tag" data-en="Troubleshooting (HW/SW)" data-ru="Troubleshooting (HW/SW)">Troubleshooting (HW/SW)</span>
+                    <span class="skill-tag" data-en="Windows 10/11" data-ru="Windows 10/11">Windows 10/11</span>
+                    <span class="skill-tag" data-en="Linux (Ubuntu / Debian)" data-ru="Linux (Ubuntu / Debian)">Linux (Ubuntu / Debian)</span>
+                    <span class="skill-tag" data-en="macOS" data-ru="macOS">macOS</span>
+                    <span class="skill-tag" data-en="POS Terminals / Cash Registers" data-ru="POS-терминалы / кассы">POS Terminals / Cash Registers</span>
+                    <span class="skill-tag" data-en="Video Surveillance / CCTV" data-ru="Видеонаблюдение / CCTV">Video Surveillance / CCTV</span>
+                    <span class="skill-tag" data-en="IP Cameras / NVR / DVR" data-ru="IP-камеры / NVR / DVR">IP Cameras / NVR / DVR</span>
+                    <span class="skill-tag" data-en="PoE / Structured Cabling" data-ru="PoE / СКС">PoE / Structured Cabling</span>
+                    <span class="skill-tag" data-en="Remote Support" data-ru="Удалённая поддержка">Remote Support</span>
+                    <span class="skill-tag" data-en="Ticketing Systems" data-ru="Тикет-системы">Ticketing Systems</span>
+                    <span class="skill-tag" data-en="Networking: Ethernet / Wi-Fi" data-ru="Сети: Ethernet / Wi-Fi">Networking: Ethernet / Wi-Fi</span>
+                    <span class="skill-tag" data-en="GPRS / 3G Connectivity" data-ru="GPRS / 3G">GPRS / 3G Connectivity</span>
+                    <span class="skill-tag" data-en="Port Forwarding / NAT" data-ru="Проброс портов / NAT">Port Forwarding / NAT</span>
+                    <span class="skill-tag" data-en="FTP / File Transfer" data-ru="FTP / передача файлов">FTP / File Transfer</span>
+                    <span class="skill-tag" data-en="PC &amp; Laptop Diagnostics" data-ru="Диагностика ПК и ноутбуков">PC &amp; Laptop Diagnostics</span>
+                    <span class="skill-tag" data-en="Peripherals: Printers, MFPs" data-ru="Периферия: принтеры, МФУ">Peripherals: Printers, MFPs</span>
+                    <span class="skill-tag" data-en="Scripting: Python / VBA" data-ru="Скрипты: Python / VBA">Scripting: Python / VBA</span>
+                    <span class="skill-tag" data-en="Server Administration" data-ru="Администрирование серверов">Server Administration</span>
+                    <span class="skill-tag" data-en="AI &amp; Prompting" data-ru="AI &amp; Prompting">AI &amp; Prompting</span>
+                </div>
             </div>
+
+            <!-- Languages & Tools -->
+            <div class="section">
+                <h2 data-en="Languages &amp; Tools" data-ru="Языки и инструменты">Languages &amp; Tools</h2>
+                <div class="info-grid">
+                    <div class="info-block">
+                        <h3 data-en="Languages" data-ru="Языки">Languages</h3>
+                        <p data-en="&lt;strong&gt;Russian:&lt;/strong&gt; Native" data-ru="&lt;strong&gt;Русский:&lt;/strong&gt; Родной"><strong>Russian:</strong> Native</p>
+                        <p data-en="&lt;strong&gt;English:&lt;/strong&gt; B2" data-ru="&lt;strong&gt;Английский:&lt;/strong&gt; B2"><strong>English:</strong> B2</p>
+                        <p data-en="&lt;strong&gt;Serbian:&lt;/strong&gt; Learning (A1)" data-ru="&lt;strong&gt;Сербский:&lt;/strong&gt; Изучаю (A1)"><strong>Serbian:</strong> Learning (A1)</p>
+                    </div>
+                    <div class="info-block">
+                        <h3 data-en="Tools &amp; Software" data-ru="Инструменты и ПО">Tools &amp; Software</h3>
+                        <p data-en="Windows / Windows Server, Active Directory, Linux (Ubuntu/Debian), macOS, Hikvision, Jira, ticketing systems, T3 code, MS Office, VS Code, Python, AI Tools (DeepSeek, ChatGPT, Gemini)"
+                           data-ru="Windows / Windows Server, Active Directory, Linux (Ubuntu/Debian), macOS, Hikvision, Jira, тикет-системы, T3 code, MS Office, VS Code, Python, AI-инструменты (DeepSeek, ChatGPT, Gemini)">Windows / Windows Server, Active Directory, Linux (Ubuntu/Debian), macOS, Hikvision, Jira, ticketing systems, T3 code, MS Office, VS Code, Python, AI Tools (DeepSeek, ChatGPT, Gemini)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="section">
+                <h2 data-en="Education" data-ru="Образование">Education</h2>
+                <div class="edu-item">
+                    <div class="edu-title" data-en="Higher Technical Education (in progress)" data-ru="Высшее техническое (в процессе)">Higher Technical Education (in progress)</div>
+                    <div class="edu-desc" data-en="&lt;strong&gt;Ural Federal University (UrFU):&lt;/strong&gt; Technological Machines and Equipment (2 years) / Infocommunication Technologies (1 year)" data-ru="&lt;strong&gt;УрФУ (Ural Federal University):&lt;/strong&gt; Технологические машины и оборудование (2 года) / Инфокоммуникационные технологии (1 год)"><strong>Ural Federal University (UrFU):</strong> Technological Machines and Equipment (2 years) / Infocommunication Technologies (1 year)</div>
+                </div>
+                <div class="edu-item">
+                    <div class="edu-desc" data-en="&lt;strong&gt;UGLTU:&lt;/strong&gt; Automation of Technological Processes and Production (3 years)" data-ru="&lt;strong&gt;УГЛТУ:&lt;/strong&gt; Автоматизация технологических процессов и производств (3 года)"><strong>UGLTU:</strong> Automation of Technological Processes and Production (3 years)</div>
+                </div>
+                <div class="edu-item">
+                    <div class="edu-desc" data-en="&lt;strong&gt;Serbian University (planned):&lt;/strong&gt; Currently actively learning Serbian to transfer and complete a Bachelor's degree at a local university." data-ru="&lt;strong&gt;Сербский университет (в планах):&lt;/strong&gt; Активно изучаю сербский язык для перевода и завершения бакалавриата в местном вузе."><strong>Serbian University (planned):</strong> Currently actively learning Serbian to transfer and complete a Bachelor's degree at a local university.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span data-en="© 2026 Mikhail · Built from my CV" data-ru="© 2026 Михаил · Сделано на основе моего CV">© 2026 Mikhail · Built from my CV</span>
         </div>
     </div>
 
+    <script>
+        (function () {
+            var buttons = document.querySelectorAll('.lang-switch button');
+            var elements = document.querySelectorAll('[data-en][data-ru]');
+            var htmlEl = document.documentElement;
+            var titleEl = document.querySelector('title');
+
+            function setLang(lang) {
+                // Toggle button active state
+                buttons.forEach(function (btn) {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+
+                // Swap text content (preserving inner HTML for bold tags)
+                elements.forEach(function (el) {
+                    var value = el.getAttribute('data-' + lang);
+                    if (value !== null) {
+                        // If value contains HTML tags, use innerHTML, otherwise textContent
+                        if (value.indexOf('<') !== -1) {
+                            el.innerHTML = value;
+                        } else {
+                            el.textContent = value;
+                        }
+                    }
+                });
+
+                // Update <html lang="">
+                htmlEl.setAttribute('lang', lang);
+
+                // Update page title
+                if (titleEl) {
+                    titleEl.textContent = lang === 'ru'
+                        ? 'Михаил — IT Support Engineer'
+                        : 'Mikhail — IT Support Engineer';
+                }
+
+                // Save preference
+                try {
+                    localStorage.setItem('cv-lang', lang);
+                } catch (e) {}
+            }
+
+            buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    setLang(btn.dataset.lang);
+                });
+            });
+
+            // Restore saved language
+            var saved = null;
+            try {
+                saved = localStorage.getItem('cv-lang');
+            } catch (e) {}
+            if (saved === 'ru' || saved === 'en') {
+                setLang(saved);
+            }
+        })();
+    </script>
 </body>
 </html>
