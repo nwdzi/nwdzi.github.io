@@ -1,598 +1,197 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор буста</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Mikhail - IT Support Engineer CV</title>
     <style>
-        /* Снег */
-        .snowflake {
-            position: fixed;
-            top: -20px;
-            color: white;
-            font-size: 1em;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.8;
-            animation-timing-function: linear;
-            animation-fill-mode: forwards;
+        *, *::before, *::after { 
+            box-sizing: border-box; 
         }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translateX(15px) rotate(180deg);
-            }
-            100% {
-                transform: translateY(100vh) translateX(30px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1c1c1c, #292929);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            line-height: 1.5;
+            background-color: #525659;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
+            padding: 40px 20px;
         }
-
-        .calculators-container {
+        .container {
             display: flex;
-            gap: 30px;
-            max-width: 1400px;
-            width: 100%;
-            justify-content: center;
-            align-items: flex-start;
+            width: 210mm;
+            min-height: 297mm;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
-
-        .calculator {
-            background: linear-gradient(145deg, #222, #1a1a1a);
+        .left-column {
+            width: 35%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            width: 520px;
-            min-height: 500px;
-            transition: transform 0.2s ease-in-out;
-            position: relative;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
         }
-
-        .calculator:hover {
-            transform: scale(1.02);
+        .right-column {
+            width: 65%;
+            padding: 40px;
+            background-color: #ffffff;
         }
-
-        h1 {
-            text-align: center;
-            color: #ff79c6;
-            font-size: 24px;
-            margin-bottom: 25px;
+        h2 {
+            font-size: 15pt;
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 0;
+            margin-bottom: 12px;
         }
-
-        .input-group {
+        .left-column h2 {
+            color: #3498db;
+            border-bottom: 2px solid #34495e;
+            font-size: 13pt;
+        }
+        h3 {
+            font-size: 11pt;
+            margin: 10px 0 2px 0;
+            color: #2c3e50;
+        }
+        p, ul {
+            font-size: 9.5pt;
+            margin: 0 0 8px 0;
+        }
+        ul {
+            padding-left: 18px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .skill-item {
+            background-color: #34495e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 0 4px 4px 0;
+            font-size: 8.5pt;
+        }
+        .date {
+            font-size: 8.5pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .section {
             margin-bottom: 20px;
-            flex-shrink: 0;
         }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ff79c6;
-            font-weight: bold;
+        .contact-link {
+            color: #3498db;
+            text-decoration: none;
         }
-
-        .input-group input,
-        .input-group select,
-        .input-group button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: #333;
-            color: #fff;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: #ff79c6;
-            box-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
-        }
-
-        .calculate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            margin-top: auto;
-        }
-
-        .calculate-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        }
-
-        .calculate-btn:hover::before {
-            left: 100%;
-        }
-
-        .calculate-btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .result {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ff79c6;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .game-title {
-            text-align: center;
-            color: #ff79c6;
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 25px;
-            padding: 12px;
-            background: rgba(255, 121, 198, 0.1);
-            border-radius: 8px;
-        }
-
-        .calculator-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        .contact-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="calculators-container">
-        <!-- Калькулятор CS:GO -->
-        <div class="calculator">
-            <div class="calculator-content">
-                <div class="game-title">CS:GO</div>
-                
-                <div class="input-group">
-                    <label for="initialEloCS">Изначальное количество elo:</label>
-                    <input type="number" id="initialEloCS" placeholder="Введите начальное количество elo">
-                </div>
-                <div class="input-group">
-                    <label for="targetEloCS">Желаемое количество elo:</label>
-                    <input type="number" id="targetEloCS" placeholder="Введите желаемое количество elo">
-                </div>
-                <div class="input-group">
-                    <label for="boostTypeCS">Тип буста:</label>
-                    <select id="boostTypeCS">
-                        <option value="solo">Буст с передачей</option>
-                        <option value="duo">Пати буст</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="markupCS">Наценка (%):</label>
-                    <input type="number" id="markupCS" placeholder="Введите наценку в %" value="0">
-                </div>
-                
-                <button class="calculate-btn" onclick="calculatePrice('cs')">Рассчитать цену</button>
-                <div class="result" id="resultCS"></div>
+    <div class="container">
+        <!-- Left column -->
+        <div class="left-column">
+            <h2 style="border:none; margin-bottom:2px; color:#ecf0f1; font-size:22pt;">Mikhail</h2>
+            <p style="font-size: 13pt; color: #3498db; margin-bottom: 20px;">IT Support Engineer / Junior System Administrator</p>
+            
+            <p>📍 Belgrade, Serbia</p>
+            <p>👤 22 years old</p>
+            <p>✈️ Telegram: <a href="https://t.me/nwdzi" class="contact-link">@nwdzi</a></p>
+            <p>📩 mihailnadym891@gmail.com</p>
+            <p>📞 +7 951 989-18-09 (WhatsApp / Viber)</p>
+            <p>📞 +381 63 759-6722</p>
+
+            <h2 style="margin-top: 30px;">Skills</h2>
+            <div>
+                <span class="skill-item">Troubleshooting (HW/SW)</span>
+                <span class="skill-item">Windows 10/11</span>
+                <span class="skill-item">Linux (Ubuntu / Debian)</span>
+                <span class="skill-item">macOS</span>
+                <span class="skill-item">POS Terminals / Cash Registers</span>
+                <span class="skill-item">Remote Support</span>
+                <span class="skill-item">Ticketing Systems</span>
+                <span class="skill-item">Networking: Ethernet / Wi-Fi</span>
+                <span class="skill-item">GPRS / 3G Connectivity</span>
+                <span class="skill-item">Port Forwarding / NAT</span>
+                <span class="skill-item">FTP / File Transfer</span>
+                <span class="skill-item">PC &amp; Laptop Diagnostics</span>
+                <span class="skill-item">Peripherals: Printers, MFPs</span>
+                <span class="skill-item">Scripting: Python / VBA</span>
+                <span class="skill-item">Server Administration</span>
+                <span class="skill-item">AI &amp; Prompting</span>
             </div>
+
+            <h2 style="margin-top: 30px;">Languages</h2>
+            <p><strong>Russian:</strong> Native</p>
+            <p><strong>English:</strong> B2</p>
+            <p><strong>Serbian:</strong> Learning (A1)</p>
+
+            <h2 style="margin-top: 30px;">Tools &amp; Software</h2>
+            <p>Windows / Windows Server, Active Directory, Linux (Ubuntu/Debian), macOS, Jira, ticketing systems, T3 code, MS Office, VS Code, Python, AI Tools (DeepSeek, ChatGPT, Gemini)</p>
         </div>
 
-        <!-- Калькулятор Dota 2 -->
-        <div class="calculator">
-            <div class="calculator-content">
-                <div class="game-title">Dota 2</div>
-                
-                <div class="input-group">
-                    <label for="boostTypeDota">Тип буста:</label>
-                    <select id="boostTypeDota">
-                        <option value="solo">Соло буст</option>
-                        <option value="duo">Дуо буст</option>
-                        <option value="honor">Буст порядочности</option>
-                        <option value="hours">Отыгрыш часов</option>
-                    </select>
-                </div>
+        <!-- Right column -->
+        <div class="right-column">
+            <div class="section">
+                <h2>About Me</h2>
+                <p>IT Support Engineer with 2 years of hands-on experience in POS/terminal support, combining on-site and remote troubleshooting. Skilled in diagnosing and repairing Windows- and Linux-based cash registers and payment terminals, configuring network connectivity (Ethernet, Wi-Fi, GPRS/3G), and providing remote assistance to users over the phone. Raised in a family with an IT business — I have understood PC hardware, diagnostics, and repair since childhood. I also have experience building my own home Linux server with remote access. Native Russian speaker with English at B2 level. Quick learner, focused on growing in IT Support / System Administration.</p>
+            </div>
 
-                <!-- Поля для Соло буста -->
-                <div class="input-group" id="soloInputs">
-                    <label for="initialMMR">Изначальный ММР:</label>
-                    <input type="number" id="initialMMR" placeholder="Введите изначальный ММР">
-                    <label for="finalMMR">Конечный ММР:</label>
-                    <input type="number" id="finalMMR" placeholder="Введите конечный ММР">
-                    <label for="soloDoubleSelect">Тип игры:</label>
-                    <select id="soloDoubleSelect">
-                        <option value="normal">Обычный</option>
-                        <option value="double">Даблы</option>
-                    </select>
-                </div>
+            <div class="section">
+                <h2>Experience</h2>
+                <h3>POS Engineer</h3>
+                <p class="date">06.2025 – 10.2026</p>
+                <ul>
+                    <li>Provided on-site and remote technical support for POS terminals and cash registers based on Windows and Linux.</li>
+                    <li>Diagnosed and repaired hardware and software issues on cash registers, terminals, and connected peripherals.</li>
+                    <li>Assisted users remotely over the phone, guiding them step-by-step through troubleshooting and repair procedures.</li>
+                    <li>Configured and diagnosed network connectivity: Ethernet, Wi-Fi, and GPRS/3G.</li>
+                    <li>Processed and resolved service requests through the company's internal ticketing system; independently acquired and handled client tickets when required.</li>
+                    <li>Performed on-site visits to resolve issues that could not be fixed remotely.</li>
+                </ul>
 
-                <!-- Поля для Дуо буста -->
-                <div class="input-group" id="duoInputs" style="display:none;">
-                    <label for="clientMMR">ММР клиента:</label>
-                    <input type="number" id="clientMMR" placeholder="Введите ММР клиента">
-                    <label for="gameCount">Количество игр:</label>
-                    <input type="number" id="gameCount" placeholder="Введите количество игр">
-                    <label for="duoDoubleSelect">Тип игры:</label>
-                    <select id="duoDoubleSelect">
-                        <option value="normal">Обычный</option>
-                        <option value="double">Даблы</option>
-                    </select>
-                </div>
+                <h3>Home Linux Server (Personal Project)</h3>
+                <p class="date">Personal project</p>
+                <ul>
+                    <li>Installed and configured a Linux server (Ubuntu/Debian) on home hardware.</li>
+                    <li>Configured port forwarding and NAT for external network access to the server.</li>
+                    <li>Deployed a self-hosted cloud storage and provided remote access to it.</li>
+                    <li>Set up an FTP server for file transfer and remote data access.</li>
+                    <li>Performed basic network security configuration, user and access rights management.</li>
+                    <li>Diagnosed and resolved server-side issues, worked with logs.</li>
+                </ul>
+            </div>
 
-                <!-- Поля для Буста порядочности -->
-                <div class="input-group" id="honorInputs" style="display:none;">
-                    <label for="clientMMRHonor">ММР клиента:</label>
-                    <input type="number" id="clientMMRHonor" placeholder="Введите ММР">
-                    <label for="initialHonor">Начальная порядочность:</label>
-                    <input type="number" id="initialHonor" placeholder="Введите начальную порядочность">
-                    <label for="finalHonor">Конечная порядочность:</label>
-                    <input type="number" id="finalHonor" placeholder="Введите конечную порядочность">
-                </div>
+            <div class="section">
+                <h2>Technical Competencies</h2>
+                <ul>
+                    <li><strong>User Support:</strong> On-site and remote support (phone-based guidance), handling and prioritizing requests, diagnosing software and hardware issues.</li>
+                    <li><strong>Ticketing Systems:</strong> Processing service requests through an internal ticketing system; independently acquiring and managing client tickets.</li>
+                    <li><strong>Windows &amp; Linux Environments:</strong> Confident with Windows 10/11; hands-on with Linux-based terminals and servers. Familiar with Windows Server and Active Directory (ready to develop further on the job).</li>
+                    <li><strong>POS &amp; Hardware:</strong> Diagnostics and repair of POS terminals, cash registers, PCs, laptops, and peripherals (printers, MFPs).</li>
+                    <li><strong>Networking:</strong> Configuration and diagnostics of Ethernet, Wi-Fi, and GPRS/3G; port forwarding, NAT, FTP, understanding of network principles.</li>
+                    <li><strong>Linux &amp; Servers:</strong> Installing and configuring Linux servers, deploying services (including FTP), remote access, working with logs.</li>
+                    <li><strong>Automation &amp; Scripting:</strong> Basic Python skills, writing VBA macros, understanding of system administration automation practices.</li>
+                    <li><strong>Documentation &amp; Research:</strong> Quickly navigate technical documentation and guidelines, independently solve non-standard tasks.</li>
+                    <li><strong>AI &amp; LLMs:</strong> Using LLMs (DeepSeek, ChatGPT, Gemini) to optimize solution finding and documentation preparation.</li>
+                </ul>
+            </div>
 
-                <!-- Поля для Отыгрыша часов -->
-                <div class="input-group" id="hoursInputs" style="display:none;">
-                    <label for="hoursCount">Количество часов:</label>
-                    <input type="number" id="hoursCount" placeholder="Введите количество часов">
-                </div>
-
-                <div class="input-group">
-                    <label for="markupDota">Наценка (%):</label>
-                    <input type="number" id="markupDota" placeholder="Введите наценку в %" value="0">
-                </div>
-                
-                <button class="calculate-btn" onclick="calculatePrice('dota')">Рассчитать цену</button>
-                <div class="result" id="resultDota"></div>
+            <div class="section">
+                <h2>Education</h2>
+                <h3>Higher Technical Education (in progress)</h3>
+                <p class="date">Present</p>
+                <ul>
+                    <li><strong>Ural Federal University (UrFU):</strong> Technological Machines and Equipment (2 years) / Infocommunication Technologies (1 year)</li>
+                    <li><strong>UGLTU:</strong> Automation of Technological Processes and Production (3 years)</li>
+                    <li><strong>Serbian University (planned):</strong> Currently actively learning Serbian to transfer and complete a Bachelor's degree at a local university.</li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <script>
-        // Таблицы расценок для CS:GO
-        const soloRatesCS = [
-            { min: 1, max: 501, rate: 50 },
-            { min: 501, max: 751, rate: 55 },
-            { min: 751, max: 901, rate: 60 },
-            { min: 901, max: 1051, rate: 65 },
-            { min: 1051, max: 1201, rate: 75 },
-            { min: 1201, max: 1351, rate: 90 },
-            { min: 1351, max: 1531, rate: 120 },
-            { min: 1531, max: 1751, rate: 150 },
-            { min: 1751, max: 2001, rate: 175 },
-            { min: 2001, max: 2101, rate: 200 },
-            { min: 2101, max: 2201, rate: 225 },
-            { min: 2201, max: 2301, rate: 240 },
-            { min: 2301, max: 2401, rate: 265 },
-            { min: 2401, max: 2501, rate: 305 },
-            { min: 2501, max: 2601, rate: 360 },
-            { min: 2601, max: 2701, rate: 395 },
-            { min: 2701, max: 2801, rate: 440 },
-            { min: 2801, max: 2901, rate: 640 },
-            { min: 2901, max: 3001, rate: 800 }
-        ];
-
-        const duoRatesCS = [
-            { min: 1, max: 501, rate: 85 },
-            { min: 501, max: 751, rate: 90 },
-            { min: 751, max: 901, rate: 95 },
-            { min: 901, max: 1051, rate: 100 },
-            { min: 1051, max: 1201, rate: 135 },
-            { min: 1201, max: 1351, rate: 155 },
-            { min: 1351, max: 1531, rate: 175 },
-            { min: 1531, max: 1751, rate: 205 },
-            { min: 1751, max: 2001, rate: 255 },
-            { min: 2001, max: 2101, rate: 330 },
-            { min: 2101, max: 2201, rate: 380 },
-            { min: 2201, max: 2301, rate: 420 },
-            { min: 2301, max: 2401, rate: 450 },
-            { min: 2401, max: 2501, rate: 500 },
-            { min: 2501, max: 2601, rate: 600 },
-            { min: 2601, max: 2701, rate: 650 },
-            { min: 2701, max: 2801, rate: 750 },
-            { min: 2801, max: 2901, rate: 900 },
-            { min: 2901, max: 3001, rate: 1350 }
-        ];
-
-        // Таблицы для Dota 2
-        const soloRatesD = [
-            { min: 1, max: 2000, rate: 125 },
-            { min: 2000, max: 3000, rate: 150 },
-            { min: 3000, max: 3500, rate: 185 },
-            { min: 3500, max: 4000, rate: 250 },
-            { min: 4000, max: 4500, rate: 300 },
-            { min: 4500, max: 5000, rate: 330 },
-            { min: 5000, max: 5500, rate: 400 },
-            { min: 5500, max: 6500, rate: 500 },
-            { min: 6500, max: 7500, rate: 600 },
-            { min: 7500, max: 8500, rate: 650 },
-            { min: 8500, max: 9000, rate: 900 }, 
-            { min: 9000, max: 9500, rate: 1200 }, 
-            { min: 9500, max: 10000, rate: 1400 }, 
-            { min: 10000, max: 10500, rate: 1700 },
-            { min: 10500, max: 11000, rate: 2000 }, 
-        ];
-
-        const duoRatesD = [
-            { min: 10, max: 2000, rate: 55 },
-            { min: 2000, max: 3000, rate: 65 },
-            { min: 3000, max: 3500, rate: 75 },
-            { min: 3500, max: 4000, rate: 90 },
-            { min: 4000, max: 4500, rate: 100 },
-            { min: 4500, max: 5000, rate: 135 },
-            { min: 5000, max: 5500, rate: 165 },
-            { min: 5500, max: 6000, rate: 200 },
-            { min: 6000, max: 6500, rate: 300 },
-            { min: 6500, max: 7000, rate: 400 },
-            { min: 7000, max: 7500, rate: 500 },
-            { min: 7500, max: 8000, rate: 700 },
-            { min: 8000, max: 8500, rate: 850 },
-            { min: 8500, max: 9000, rate: 1000 },
-            { min: 9000, max: 9500, rate: 1200 },
-            { min: 9500, max: 10000, rate: 1500 },
-            { min: 10000, max: 10500, rate: 1800 },
-            { min: 10500, max: 11000, rate: 2000 },
-        ];
-
-        // Обработчик для смены типа буста в Dota 2
-        document.getElementById('boostTypeDota').addEventListener('change', updateDotaFields);
-
-        // Функции для обновления полей Dota 2
-        function updateDotaFields() {
-            const boostType = document.getElementById('boostTypeDota').value;
-            
-            // Скрываем все группы
-            document.getElementById('soloInputs').style.display = 'none';
-            document.getElementById('duoInputs').style.display = 'none';
-            document.getElementById('honorInputs').style.display = 'none';
-            document.getElementById('hoursInputs').style.display = 'none';
-            
-            // Показываем нужную группу
-            if (boostType === 'solo') {
-                document.getElementById('soloInputs').style.display = 'block';
-            } else if (boostType === 'duo') {
-                document.getElementById('duoInputs').style.display = 'block';
-            } else if (boostType === 'honor') {
-                document.getElementById('honorInputs').style.display = 'block';
-            } else if (boostType === 'hours') {
-                document.getElementById('hoursInputs').style.display = 'block';
-            }
-        }
-
-        // Основная функция расчета
-        function calculatePrice(game) {
-            let totalPrice = 0;
-            let markup = 0;
-
-            if (game === 'cs') {
-                // Расчет для CS:GO
-                const initialElo = parseInt(document.getElementById('initialEloCS').value) || 0;
-                const targetElo = parseInt(document.getElementById('targetEloCS').value) || 0;
-                const boostType = document.getElementById('boostTypeCS').value;
-                markup = parseInt(document.getElementById('markupCS').value) || 0;
-                
-                if (initialElo >= targetElo) {
-                    document.getElementById('resultCS').innerText = "Целевое количество elo должно быть больше начального!";
-                    return;
-                }
-                
-                if (initialElo < 0 || targetElo < 0) {
-                    document.getElementById('resultCS').innerText = "Количество elo не может быть отрицательным!";
-                    return;
-                }
-
-                const eloToBoost = targetElo - initialElo;
-                const rates = boostType === 'solo' ? soloRatesCS : duoRatesCS;
-                
-                let remainingElo = eloToBoost;
-                let currentElo = initialElo;
-                
-                while (remainingElo > 0) {
-                    const currentRange = rates.find(range => currentElo >= range.min && currentElo < range.max);
-                    
-                    if (!currentRange) {
-                        document.getElementById('resultCS').innerText = "Ошибка: elo вне диапазона расценок!";
-                        return;
-                    }
-                    
-                    const eloInThisRange = Math.min(remainingElo, currentRange.max - currentElo);
-                    const blocksInRange = eloInThisRange / 25;
-                    totalPrice += blocksInRange * currentRange.rate;
-                    
-                    remainingElo -= eloInThisRange;
-                    currentElo += eloInThisRange;
-                }
-                
-                // Применяем наценку
-                if (markup > 0) {
-                    totalPrice = totalPrice * (1 + markup / 100);
-                }
-                
-                document.getElementById('resultCS').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
-                
-            } else if (game === 'dota') {
-                // Расчет для Dota 2
-                const boostType = document.getElementById('boostTypeDota').value;
-                markup = parseInt(document.getElementById('markupDota').value) || 0;
-                
-                if (boostType === 'solo') {
-                    const initialMMR = parseInt(document.getElementById('initialMMR').value) || 0;
-                    const finalMMR = parseInt(document.getElementById('finalMMR').value) || 0;
-                    const isDouble = document.getElementById('soloDoubleSelect').value === 'double';
-                    
-                    if (initialMMR >= finalMMR) {
-                        document.getElementById('resultDota').innerText = "Конечный ММР должен быть больше начального!";
-                        return;
-                    }
-                    
-                    for (let i = initialMMR; i < finalMMR; i++) {
-                        const rate = soloRatesD.find(r => i >= r.min && i < r.max)?.rate || 0;
-                        totalPrice += rate / 100;
-                    }
-                    
-                    if (isDouble) {
-                        totalPrice *= 0.75;
-                    }
-                    
-                } else if (boostType === 'duo') {
-                    const clientMMR = parseInt(document.getElementById('clientMMR').value) || 0;
-                    const gameCount = parseInt(document.getElementById('gameCount').value) || 0;
-                    const isDouble = document.getElementById('duoDoubleSelect').value === 'double';
-                    
-                    let currentMMR = clientMMR;
-
-                    for (let i = 0; i < gameCount; i++) {
-                        const mmrIncrease = isDouble ? 50 : 25;
-                        currentMMR += mmrIncrease;
-                        const rate = duoRatesD.find(r => currentMMR >= r.min && currentMMR < r.max)?.rate || 0;
-                        totalPrice += rate;
-                    }
-
-                    if (isDouble) {
-                        if (clientMMR < 5500) {
-                            totalPrice *= 1.5;
-                        } else {
-                            totalPrice *= 1.3;
-                        }
-                    }
-                    
-                } else if (boostType === 'honor') {
-                    const clientMMR = parseInt(document.getElementById('clientMMRHonor').value) || 0;
-                    const initialHonor = parseInt(document.getElementById('initialHonor').value) || 0;
-                    const finalHonor = parseInt(document.getElementById('finalHonor').value) || 0;
-                    const honorIncrease = finalHonor - initialHonor;
-
-                    if (clientMMR >= 5600) {
-                        totalPrice = (honorIncrease / 1000) * 4000;
-                    } else if (clientMMR >= 3000) {
-                        totalPrice = (honorIncrease / 1000) * 3000;
-                    } else {
-                        totalPrice = (honorIncrease / 1000) * 2000;
-                    }
-                    
-                } else if (boostType === 'hours') {
-                    let hoursCount = parseInt(document.getElementById('hoursCount').value) || 0;
-                    if (hoursCount <= 0) {
-                        document.getElementById('resultDota').innerText = "Введите корректное количество часов.";
-                        return;
-                    }
-
-                    while (hoursCount > 0) {
-                        if (hoursCount >= 100) {
-                            totalPrice += 5000;
-                            hoursCount -= 100;
-                        } else {
-                            totalPrice += hoursCount * 60;
-                            hoursCount = 0;
-                        }
-                    }
-                }
-                
-                // Применяем наценку
-                if (markup > 0) {
-                    totalPrice = totalPrice * (1 + markup / 100);
-                }
-                
-                document.getElementById('resultDota').innerText = `Цена: ${totalPrice.toFixed(2)} руб.`;
-            }
-        }
-
-        // Инициализация - показываем поля для соло буста по умолчанию
-        updateDotaFields();
-
-        // Функция создания снега - ИСПРАВЛЕННАЯ
-        function createSnowfall() {
-            const snowContainer = document.createElement('div');
-            snowContainer.className = 'snow-container';
-            snowContainer.style.position = 'fixed';
-            snowContainer.style.top = '0';
-            snowContainer.style.left = '0';
-            snowContainer.style.width = '100%';
-            snowContainer.style.height = '100%';
-            snowContainer.style.pointerEvents = 'none';
-            snowContainer.style.zIndex = '9998';
-            snowContainer.style.overflow = 'hidden';
-            document.body.appendChild(snowContainer);
-
-            function createSnowflake() {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                
-                // Разные символы снежинок
-                const snowSymbols = ['❄', '❅', '❆', '•', '*'];
-                const symbol = snowSymbols[Math.floor(Math.random() * snowSymbols.length)];
-                snowflake.innerHTML = symbol;
-                
-                // Случайные параметры - БЕЗ ЗАДЕРЖКИ
-                const left = Math.random() * 100;
-                const size = Math.random() * 0.8 + 0.5;
-                const duration = Math.random() * 3 + 4; // 4-7 секунд
-                
-                snowflake.style.left = left + 'vw';
-                snowflake.style.fontSize = size + 'em';
-                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
-                snowflake.style.animation = `fall ${duration}s linear forwards`;
-                
-                snowContainer.appendChild(snowflake);
-                
-                // Гарантированное удаление снежинки
-                setTimeout(() => {
-                    if (snowflake.parentNode) {
-                        snowflake.parentNode.removeChild(snowflake);
-                    }
-                }, duration * 1500);
-            }
-
-            // Создаем снежинки постоянно
-            function generateSnow() {
-                createSnowflake();
-                setTimeout(generateSnow, Math.random() * 100 + 50); // 50-150ms
-            }
-            
-            // Запускаем снегопад
-            generateSnow();
-        }
-
-        // Запускаем снегопад при загрузке страницы
-        window.addEventListener('load', function() {
-            setTimeout(createSnowfall, 500);
-        });
-    </script>
 </body>
 </html>
